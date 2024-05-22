@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def root():
-    return  config('SECRET_KEY')
+    return  "Conectado!"
 
 @app.route("/simulation", methods=["POST"])
 def add_simulation():
