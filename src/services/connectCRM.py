@@ -50,17 +50,11 @@ def save_simulation( simulation ):
                 simulation['phone'] = ''
             if not simulation.get('email'):
                 simulation['email'] = ''    
-            if not simulation.get('postal_code'):
-                simulation['postal_code'] = ''   
-            if simulation.get('postal_code') == "":
-                complete_phone =  complete_phone =  simulation.get('phone')
-            else:
-                complete_phone =  f"({simulation.get('postal_code')}){simulation.get('phone')}"
             
             df = pd.DataFrame({
                 'Nombre': [simulation.get('name')],
                 'Apellido': [""],
-                'Celular': [complete_phone],
+                'Celular': [simulation['phone']],
                 'Email': [simulation.get('email')],
                 'Origen': simulation.get('origin'),
                 'Proyecto': [""],
