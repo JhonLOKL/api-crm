@@ -3,6 +3,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 from decouple import config
+import re
 
 def save_simulation( simulation ):
     
@@ -29,24 +30,39 @@ def save_simulation( simulation ):
         crm_oportunidad = pd.DataFrame(data, columns=hoja_crm.get_all_values()[0])
         crm_oportunidad['Celular'] = crm_oportunidad['Celular'].str.replace(r'\+', '', regex=True)
         crm_oportunidad['Celular'] = crm_oportunidad['Celular'].str.replace(r'\=', '', regex=True)
+        crm_oportunidad['Celular'] = crm_oportunidad['Celular'].str.replace(r"\'", "", regex=True)
+        crm_oportunidad['Celular'] = crm_oportunidad['Celular'].str.replace("'", "")
         crm_oportunidad['Celular'] = crm_oportunidad['Celular'].str.replace('+', '')
         crm_oportunidad['Celular'] = crm_oportunidad['Celular'].str.replace('=', '')
         crm_oportunidad['Celular'] = crm_oportunidad['Celular'].str.replace(r'\(.*?\)', '', regex=True)
         crm_oportunidad['Celular'] = crm_oportunidad['Celular'].str.replace(r'^57', '', regex=True)
         
+        phone_to_check = ''
+        if simulation.get('phone'):
+            phone_to_check = simulation.get('phone')
+            phone_to_check = re.sub(r'\(.*?\)', '', phone_to_check)
+            phone_to_check = phone_to_check.replace('+', '')
+            phone_to_check = phone_to_check.replace("'", "")
+            phone_to_check = phone_to_check.replace('=', '')
+            phone_to_check = phone_to_check.replace('-', '')
+
+            if phone_to_check.startswith('57'):
+                phone_to_check = phone_to_check[2:]
+            
+            print("---------phone-----------------")
+            print(phone_to_check)
         
         if 'email' in simulation:
             email_to_check = simulation['email']
             user_already_exists = email_to_check in crm_oportunidad['Email'].values
         
         if (user_already_exists == False) and ('phone' in simulation):
-            phone_to_check = simulation['phone']
             user_already_exists = phone_to_check in crm_oportunidad['Celular'].values
             
         if (user_already_exists == False):
             spreadsheet = gc.open_by_url(config('CRM_URL'))
             
-            if not simulation.get('phone'):
+            if not simulation:
                 simulation['phone'] = ''
             if not simulation.get('email'):
                 simulation['email'] = ''    
@@ -56,10 +72,10 @@ def save_simulation( simulation ):
                 'Apellido': [""],
                 'Celular': [simulation['phone']],
                 'Email': [simulation.get('email')],
-                'Origen': simulation.get('origin'),
+                'Origen': simulation.get('leadOrigin'),
                 'Proyecto': [""],
-                'Fecha ingreso': [pd.to_datetime(simulation.get('created_at')).strftime('%d/%m/%Y')],
-                'Hora Ingreso': [pd.to_datetime(simulation.get('created_at')).strftime('%H:%M')]
+                'Fecha ingreso': [pd.to_datetime(simulation.get('createdAt')).strftime('%d/%m/%Y')],
+                'Hora Ingreso': [pd.to_datetime(simulation.get('createdAt')).strftime('%H:%M')]
             })
             print(df.head())
             sheet_title = 'CRM (Oportunidad)'
