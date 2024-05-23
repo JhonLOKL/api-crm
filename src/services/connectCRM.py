@@ -45,15 +45,27 @@ def save_simulation( simulation ):
             
         if (user_already_exists == False):
             spreadsheet = gc.open_by_url(config('CRM_URL'))
+            
+            if not simulation.get('phone'):
+                simulation['phone'] = ''
+            if not simulation.get('email'):
+                simulation['email'] = ''    
+            if not simulation.get('postal_code'):
+                simulation['postal_code'] = ''   
+            if simulation.get('postal_code') == "":
+                complete_phone =  complete_phone =  simulation.get('phone')
+            else:
+                complete_phone =  f"({simulation.get('postal_code')}){simulation.get('phone')}"
+            
             df = pd.DataFrame({
-                'Nombre': [simulation['name']],
+                'Nombre': [simulation.get('name')],
                 'Apellido': [""],
-                'Celular': [simulation['phone']],
-                'Email': [simulation['email']],
-                'Origen': simulation['origin'],
+                'Celular': [complete_phone],
+                'Email': [simulation.get('email')],
+                'Origen': simulation.get('origin'),
                 'Proyecto': [""],
-                'Fecha ingreso': [pd.to_datetime(simulation['created_at']).strftime('%d/%m/%Y')],
-                'Hora Ingreso': [pd.to_datetime(simulation['created_at']).strftime('%H:%M')]
+                'Fecha ingreso': [pd.to_datetime(simulation.get('created_at')).strftime('%d/%m/%Y')],
+                'Hora Ingreso': [pd.to_datetime(simulation.get('created_at')).strftime('%H:%M')]
             })
             print(df.head())
             sheet_title = 'CRM (Oportunidad)'
