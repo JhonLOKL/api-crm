@@ -46,3 +46,4 @@ uritemplate==4.1.1
 urllib3==2.2.1
 Werkzeug==3.0.3
 wheel==0.38.4
+gunicorn
