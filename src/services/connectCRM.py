@@ -48,17 +48,14 @@ def save_simulation( simulation ):
 
             if phone_to_check.startswith('57'):
                 phone_to_check = phone_to_check[2:]
-            
-            print("---------phone-----------------")
-            print(phone_to_check)
-        
-        if 'email' in simulation:
+
+        if ('email' in simulation) and simulation['email'] != "":
             email_to_check = simulation['email']
             user_already_exists = email_to_check in crm_oportunidad['Email'].values
-        
-        if (user_already_exists == False) and ('phone' in simulation):
+
+        if (user_already_exists == False) and ('phone' in simulation) and (simulation['phone'] != ""):
             user_already_exists = phone_to_check in crm_oportunidad['Celular'].values
-            
+
         if (user_already_exists == False):
             spreadsheet = gc.open_by_url(config('CRM_URL'))
             
@@ -67,17 +64,24 @@ def save_simulation( simulation ):
             if not simulation.get('email'):
                 simulation['email'] = ''    
             
+            created_at = simulation.get('createdAt')
+            if created_at:
+                entry_date = pd.to_datetime(created_at).strftime('%d/%m/%Y')
+                entry_time = pd.to_datetime(created_at).strftime('%H:%M')
+            else:
+                entry_date = None
+                entry_time = None
+
             df = pd.DataFrame({
                 'Nombre': [simulation.get('name')],
                 'Apellido': [""],
                 'Celular': [simulation['phone']],
                 'Email': [simulation.get('email')],
-                'Origen': simulation.get('leadOrigin'),
+                'Origen': [simulation.get('leadOrigin')],
                 'Proyecto': [""],
-                'Fecha ingreso': [pd.to_datetime(simulation.get('createdAt')).strftime('%d/%m/%Y')],
-                'Hora Ingreso': [pd.to_datetime(simulation.get('createdAt')).strftime('%H:%M')]
+                'Fecha ingreso': [entry_date],
+                'Hora Ingreso': [entry_time]
             })
-            print(df.head())
             sheet_title = 'CRM (Oportunidad)'
             worksheet = spreadsheet.worksheet(sheet_title)
             empty_rows = [i + 2 for i, row in enumerate(worksheet.get_all_values()[1:]) if not any(row[0:4])]
@@ -93,7 +97,7 @@ def save_simulation( simulation ):
                         
                 for row_index, value_row in zip(empty_rows, values):
                     worksheet.update(f'A{row_index}', [value_row])
-                
+
                 return "Usuario agregado correctamente a CRM."         
             
             else:

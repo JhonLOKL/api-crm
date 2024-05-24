@@ -6,13 +6,12 @@ from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route("/")
 def root():
     return  "Conectado!"
 
-@cross_origin
 @app.route("/simulation", methods=["POST"])
 def add_simulation():
 
