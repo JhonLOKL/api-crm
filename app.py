@@ -2,13 +2,17 @@ import datetime
 from flask import Flask, json, jsonify, request
 import src.services.connectCRM as connection
 from decouple import config
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+
+CORS(app)
 
 @app.route("/")
 def root():
     return  "Conectado!"
 
+@cross_origin
 @app.route("/simulation", methods=["POST"])
 def add_simulation():
 
