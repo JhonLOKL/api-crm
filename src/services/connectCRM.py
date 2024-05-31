@@ -77,7 +77,8 @@ def save_simulation( simulation ):
                 'Apellido': [""],
                 'Celular': [simulation['phone']],
                 'Email': [simulation.get('email')],
-                'Origen': [simulation.get('leadOrigin')],
+                "Como nos conocio" : [simulation.get('leadOrigin')],
+                'Origen': "Simulador",
                 'Proyecto': [""],
                 'Fecha ingreso': [entry_date],
                 'Hora Ingreso': [entry_time]
