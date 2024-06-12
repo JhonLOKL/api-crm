@@ -106,5 +106,5 @@ def save_register( register ):
  
     except Exception as error:
         print("Se produjo un error:", error)
-        return "Error guardando la simulacion en CRM"
+        return "Error guardando el registro en CRM"
  

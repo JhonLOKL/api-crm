@@ -52,12 +52,12 @@ def save_register_in_db( register ):
             for row_index, value_row in zip(empty_rows, values):
                 worksheet.update(f'A{row_index}', [value_row])
 
-            return "Usuario agregado correctamente a CRM."         
+            return "Usuario agregado correctamente a DB."         
             
         else:
             return "No hay filas vacías para agregar datos."
 
     except Exception as error:
         print("Se produjo un error:", error)
-        return "Error guardando la simulacion en CRM"
+        return "Error guardando el registro en DB"
  
