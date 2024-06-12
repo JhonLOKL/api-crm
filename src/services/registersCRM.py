@@ -3,7 +3,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 from decouple import config
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from ..utils.credentials import credentials
 
@@ -67,7 +67,7 @@ def save_register( register ):
             if not register.get('email'):
                 register['email'] = ''    
             
-            now = datetime.now()
+            now = datetime.now() - timedelta(hours=5)
             
 
             df = pd.DataFrame({
