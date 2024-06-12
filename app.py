@@ -2,6 +2,7 @@ from flask import Flask, request
 
 from flask_cors import CORS
 
+from src.services.registersDB import save_register_in_db
 from src.services.registersCRM import save_register
 from src.services.simulationsCRM import save_simulation
 
@@ -32,6 +33,12 @@ def add_register():
         return "Es necesario un correo o un telefono", 400
     
     return save_register(data), 201
+
+@app.route("/dbregister", methods=["POST"])
+def add_register_in_db():
+
+    data = request.get_json()
+    return save_register_in_db(data), 201
 
 if __name__ == '__main__':
     app.run(debug=True)
