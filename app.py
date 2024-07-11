@@ -2,6 +2,7 @@ from flask import Flask, request
 
 from flask_cors import CORS
 
+from src.services.bedroomSerices import bedroomDummies
 from src.services.hotelServices import hotelDummies
 from src.services.registersDB import save_register_in_db
 from src.services.registersCRM import save_register
@@ -41,8 +42,12 @@ def add_register_in_db():
     return save_register_in_db(data), 201
 
 @app.route("/hotel/dummies", methods=["post"])
-def hotelsDummiesProcess():
+def hotelDummiesProcess():
     return hotelDummies()
+
+@app.route("/bedroom/dummies", methods=["post"])
+def bedroomDummiesProcess():
+    return bedroomDummies()
 
 if __name__ == '__main__':
     app.run(debug=True)
