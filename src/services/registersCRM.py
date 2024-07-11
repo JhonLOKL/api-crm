@@ -77,9 +77,14 @@ def save_register( register ):
                 'Email': [register.get('email')],
                 "Como nos conocio" : [register.get('leadOrigin')],
                 'Origen': "Registro pag web",
-                'Proyecto': [""],
+                'Proyecto': ["Nido de Agua"],
                 'Fecha ingreso': [now.strftime("%d/%m/%Y")],
-                'Hora Ingreso': [now.strftime("%H:%M")]
+                'Hora Ingreso': [now.strftime("%H:%M")],
+                'Fecha Atención' : None,
+                'Hora Atención' : None,
+                'Tiempo Atención' : None,
+                'Tiempo en atencion en horas' : None,
+                'Estado Oportunidad' : "Interesado",
             })
             sheet_title = 'CRM (Oportunidad)'
             worksheet = spreadsheet.worksheet(sheet_title)

@@ -80,9 +80,14 @@ def save_simulation( simulation ):
                 'Email': [simulation.get('email')],
                 "Como nos conocio" : [simulation.get('leadOrigin')],
                 'Origen': "Simulador",
-                'Proyecto': [""],
+                'Proyecto': ["Nido de Agua"],
                 'Fecha ingreso': [entry_date],
-                'Hora Ingreso': [entry_time]
+                'Hora Ingreso': [entry_time],
+                'Fecha Atención' : None,
+                'Hora Atención' : None,
+                'Tiempo Atención' : None,
+                'Tiempo en atencion en horas' : None,
+                'Estado Oportunidad' : "Interesado",
             })
             sheet_title = 'CRM (Oportunidad)'
             worksheet = spreadsheet.worksheet(sheet_title)
