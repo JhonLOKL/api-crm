@@ -7,7 +7,6 @@ import ast
 
 def hotelDummies():
     try:
-
         json_credenciales = credentials()
         scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
         credenciales = ServiceAccountCredentials.from_json_keyfile_dict(json_credenciales, scope)
@@ -33,8 +32,13 @@ def hotelDummies():
         df_features_dummies = pd.get_dummies(hotels_df['features'].apply(pd.Series).stack()).groupby(level=0).sum()
         hotels_df = pd.concat([hotels_df, df_features_dummies], axis=1)
         hotels_df = hotels_df.drop('features', axis=1)
-        
-        new_data = [hotels_df.columns.values.tolist()] + hotels_df.values.tolist()
+
+        # Reemplazar valores NaN e infinitos
+        hotels_df = hotels_df.replace([float('inf'), float('-inf')], 0)
+        hotels_df = hotels_df.fillna(0)
+
+        # Convertir todos los valores a cadenas
+        new_data = [hotels_df.columns.values.tolist()] + hotels_df.astype(str).values.tolist()
         hotels_looker_sheet.update(new_data)
 
         return ("The hotels were dummies successfully!"), 201

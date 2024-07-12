@@ -7,7 +7,6 @@ import ast
 
 def bedroomDummies():
     try:
-
         json_credenciales = credentials()
         scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
         credenciales = ServiceAccountCredentials.from_json_keyfile_dict(json_credenciales, scope)
@@ -22,7 +21,6 @@ def bedroomDummies():
         data = bedrooms_df_sheet.get_all_values()
         bedrooms_df = pd.DataFrame(data[1:], columns=data[0])
 
-       
         bedrooms_df['id'] = bedrooms_df['title_hotel'] + '-' + bedrooms_df['title_room']
         bedrooms_df = bedrooms_df.drop_duplicates(subset=['id'], keep='last')
         bedrooms_df = bedrooms_df.drop('id', axis=1)
@@ -31,8 +29,13 @@ def bedroomDummies():
         df_services_dummies = pd.get_dummies(bedrooms_df['features_room'].apply(pd.Series).stack()).groupby(level=0).sum()
         bedrooms_df = pd.concat([bedrooms_df, df_services_dummies], axis=1)
         bedrooms_df = bedrooms_df.drop('features_room', axis=1)
-        
-        new_data = [bedrooms_df.columns.values.tolist()] + bedrooms_df.values.tolist()
+
+        # Reemplazar valores NaN e infinitos
+        bedrooms_df = bedrooms_df.replace([float('inf'), float('-inf')], 0)
+        bedrooms_df = bedrooms_df.fillna(0)
+
+        # Convertir todos los valores a cadenas
+        new_data = [bedrooms_df.columns.values.tolist()] + bedrooms_df.astype(str).values.tolist()
         bedrooms_looker_sheet.update(new_data)
 
         return ("The bedrooms were dummies successfully!"), 201
