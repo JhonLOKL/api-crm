@@ -22,11 +22,6 @@ def hotelDummies():
         hotels_df = pd.DataFrame(data[1:], columns=data[0])
 
         hotels_df = hotels_df.drop_duplicates(subset=['hotel_title'], keep='last')
-        
-        hotels_df['services'] = hotels_df['services'].apply(ast.literal_eval)
-        df_services_dummies = pd.get_dummies(hotels_df['services'].apply(pd.Series).stack()).groupby(level=0).sum()
-        hotels_df = pd.concat([hotels_df, df_services_dummies], axis=1)
-        hotels_df = hotels_df.drop('services', axis=1)
 
         hotels_df['features'] = hotels_df['features'].apply(ast.literal_eval)
         df_features_dummies = pd.get_dummies(hotels_df['features'].apply(pd.Series).stack()).groupby(level=0).sum()
