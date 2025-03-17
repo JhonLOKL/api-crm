@@ -68,7 +68,7 @@ def save_register( register ):
                 register['email'] = ''    
             
             now = datetime.now() - timedelta(hours=5)
-            origin = register.get('leadOrigin')
+            origin = register.get('origin')
 
             df = pd.DataFrame({
                 'Nombre': [register.get('firstName')],
