@@ -68,7 +68,7 @@ def save_register( register ):
                 register['email'] = ''    
             
             now = datetime.now() - timedelta(hours=5)
-            
+            origin = register.get('leadOrigin')
 
             df = pd.DataFrame({
                 'Nombre': [register.get('firstName')],
@@ -76,7 +76,7 @@ def save_register( register ):
                 'Celular': [register['countryPhoneCode'] + register['phone']],
                 'Email': [register.get('email')],
                 "Como nos conocio" : [register.get('leadOrigin')],
-                'Origen': "Registro pag web",
+                'Origen': origin if origin else "Registro pag web",
                 'Proyecto': ["Nido de Agua"],
                 'Fecha ingreso': [now.strftime("%d/%m/%Y")],
                 'Hora Ingreso': [now.strftime("%H:%M")],
