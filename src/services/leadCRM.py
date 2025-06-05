@@ -9,16 +9,16 @@ from ..utils.credentials import credentials
 def lead_crm( data ):
     
     try:
-        
+        url_documento = config('CRM_URL')
         user_already_exists = False
         
         json_credenciales = credentials()
+        
         scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+        print(json_credenciales)
         credenciales = ServiceAccountCredentials.from_json_keyfile_dict(json_credenciales, scope)
         gc  = gspread.authorize(credenciales)
         
-        url_documento = config('CRM_URL')
-
         documento_id = url_documento.split("/")[5]
 
         hoja = gc.open_by_key(documento_id)
@@ -108,5 +108,5 @@ def lead_crm( data ):
  
     except Exception as error:
         print("Se produjo un error:", error)
-        return "Error guardando la simulacion en CRM"
+        return "Error guardando el lead desde Laura"
  
