@@ -2,9 +2,10 @@ from flask import Flask, request
 
 from flask_cors import CORS
 
+from services.leadCRM import lead_crm
 from src.services.bedroomSerices import bedroomDummies
 from src.services.hotelServices import hotelDummies
-from src.services.registersDB import save_register_in_db
+from services.registersDB import save_register_in_db
 from src.services.registersCRM import save_register
 from src.services.simulationsCRM import save_simulation
 
@@ -25,6 +26,13 @@ def add_simulation():
         return "Es necesario un correo o un telefono", 400
     
     return save_simulation(data), 201
+
+@app.route("/lead", methods=["POST"])
+def add_lead():
+
+    data = request.get_json()
+    
+    return lead_crm(data), 201
 
 @app.route("/register", methods=["POST"])
 def add_register():
