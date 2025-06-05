@@ -2,7 +2,7 @@ from flask import Flask, request
 
 from flask_cors import CORS
 
-from src.services.leadCRM import lead_crm
+from src.services.leadCRM import lead_crm, update_lead
 from src.services.bedroomSerices import bedroomDummies
 from src.services.hotelServices import hotelDummies
 from src.services.registersDB import save_register_in_db
@@ -33,6 +33,13 @@ def add_lead():
     data = request.get_json()
     
     return lead_crm(data), 201
+
+@app.route("/lead", methods=["PUT"])
+def update_contact():
+
+    data = request.get_json()
+    
+    return update_lead(data), 204
 
 @app.route("/register", methods=["POST"])
 def add_register():
