@@ -5,7 +5,7 @@ from flask_cors import CORS
 from src.services.leadCRM import lead_crm
 from src.services.bedroomSerices import bedroomDummies
 from src.services.hotelServices import hotelDummies
-from services.registersDB import save_register_in_db
+from src.services.registersDB import save_register_in_db
 from src.services.registersCRM import save_register
 from src.services.simulationsCRM import save_simulation
 
