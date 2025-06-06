@@ -17,7 +17,7 @@ def save_register_in_db( register ):
         sheet_name = "Users"
         worksheet = spreadsheet.worksheet(sheet_name)
             
-        df = pd.DataFrame({
+        data_dict = pd.DataFrame({
             'id': [register.get('id')],
             'email': [register.get('email')],
             'emailVerified': [register.get('emailVerified')],
@@ -39,6 +39,11 @@ def save_register_in_db( register ):
             'deletedAt': [register.get('deletedAt')],
             'roleId': [register.get('roleId')]
         })
+        utm_fields = ['utmSource', 'utmMedium', 'utmCampaign','utmTerm', 'utmContent']
+        for field in utm_fields:
+            if register.get(field):
+                data_dict[field] = [register.get(field)]
+        df = pd.DataFrame(data_dict)
         empty_rows = [i + 2 for i, row in enumerate(worksheet.get_all_values()[1:]) if not any(row[0:4])]
         if empty_rows:
             columnas_df = df.columns.tolist()

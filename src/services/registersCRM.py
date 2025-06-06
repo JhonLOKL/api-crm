@@ -70,7 +70,7 @@ def save_register( register ):
             now = datetime.now() - timedelta(hours=5)
             origin = register.get('origin')
 
-            df = pd.DataFrame({
+            data_dict = pd.DataFrame({
                 'Nombre': [register.get('firstName')],
                 'Apellido': [register.get('lastName')],
                 'Celular': [register['countryPhoneCode'] + register['phone']],
@@ -86,6 +86,11 @@ def save_register( register ):
                 'Tiempo en atencion en horas' : None,
                 'Estado Oportunidad' : "Interesado",
             })
+            utm_fields = ['utmSource', 'utmMedium', 'utmCampaign','utmTerm', 'utmContent']
+            for field in utm_fields:
+                if register.get(field):
+                    data_dict[field] = [register.get(field)]
+            df = pd.DataFrame(data_dict)
             sheet_title = 'CRM (Oportunidad)'
             worksheet = spreadsheet.worksheet(sheet_title)
             empty_rows = [i + 2 for i, row in enumerate(worksheet.get_all_values()[1:]) if not any(row[0:4])]

@@ -73,7 +73,7 @@ def save_simulation( simulation ):
                 entry_date = None
                 entry_time = None
 
-            df = pd.DataFrame({
+            data_dict  = pd.DataFrame({
                 'Nombre': [simulation.get('name')],
                 'Apellido': [""],
                 'Celular': [simulation['phone']],
@@ -89,6 +89,11 @@ def save_simulation( simulation ):
                 'Tiempo en atencion en horas' : None,
                 'Estado Oportunidad' : "Interesado",
             })
+            utm_fields = ['utmSource', 'utmMedium', 'utmCampaign','utmTerm', 'utmContent']
+            for field in utm_fields:
+                if simulation.get(field):
+                    data_dict[field] = [simulation.get(field)]
+            df = pd.DataFrame(data_dict)
             sheet_title = 'CRM (Oportunidad)'
             worksheet = spreadsheet.worksheet(sheet_title)
             empty_rows = [i + 2 for i, row in enumerate(worksheet.get_all_values()[1:]) if not any(row[0:4])]
