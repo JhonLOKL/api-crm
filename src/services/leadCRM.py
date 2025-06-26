@@ -175,6 +175,17 @@ def update_lead(data):
                 updated_row[crm_oportunidad.columns.get_loc('Email')] = data['email']
             if data.get('status') and data['status'] != '':
                 updated_row[crm_oportunidad.columns.get_loc('Estado Oportunidad')] = data['status']
+                
+            if data.get('utmSource') and data['utmSource'] != '':
+                updated_row[crm_oportunidad.columns.get_loc('utmSource')] = data['utmSource']
+            if data.get('utmMedium') and data['utmMedium'] != '':
+                updated_row[crm_oportunidad.columns.get_loc('utmMedium')] = data['utmMedium']
+            if data.get('utmCampaign') and data['utmCampaign'] != '':
+                updated_row[crm_oportunidad.columns.get_loc('utmCampaign')] = data['utmCampaign']
+            if data.get('utmTerm') and data['utmTerm'] != '':
+                updated_row[crm_oportunidad.columns.get_loc('utmTerm')] = data['utmTerm']
+            if data.get('utmContent') and data['utmContent'] != '':
+                updated_row[crm_oportunidad.columns.get_loc('utmContent')] = data['utmContent']
 
             # Reemplazar valores NaN o None con un valor por defecto
             updated_row = ["" if pd.isna(value) else value for value in updated_row]
